@@ -1,4 +1,4 @@
-function Save-BricklinkConfigurationItem {
+function Save-BricklinkConfiguration {
     [CmdletBinding()]
     param
     (
