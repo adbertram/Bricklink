@@ -20,6 +20,9 @@ function Get-BricklinkConfigurationItem {
         'api_token_secret'
     )
 
+    if (-not (Test-Path -Path "$script:rootModuleFolderPath\configuration.json" -PathType Leaf)) {
+        throw "The required configuration file [$script:rootModuleFolderPath\configuration.json] could not be found. Have you ran Save-BricklinkConfigurationItem yet?"
+    }
     $config = Get-Content -Path "$script:rootModuleFolderPath\configuration.json" | ConvertFrom-Json
 
     $config.PSObject.Properties | ForEach-Object {
