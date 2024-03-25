@@ -17,7 +17,7 @@ Before using this module, you must have:
 
 ## Initial Setup
 
-- Clone the repository or download the module to a directory listed in your $Env:PSModulePath.
+- Clone the repository from GitHub or install the module from the PowerShell Gallery by running `Install-Module Bricklink`.
 - Copy the configuration.example.json file to configuration.json and fill in your Bricklink API keys and other relevant information.
 - Load the module with Import-Module ./Bricklink (adjust the path according to where you placed the module).
 
