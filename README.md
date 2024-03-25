@@ -21,15 +21,24 @@ Before using this module, you must have:
 - Copy the configuration.example.json file to configuration.json and fill in your Bricklink API keys and other relevant information.
 - Load the module with Import-Module ./Bricklink (adjust the path according to where you placed the module).
 
-## Configuring API Credentials
+## Configuring Authentication
 
-Use the Save-BricklinkConfiguration command to save your initial API information securely. Run the following commands in PowerShell, replacing <value> with your actual API credentials:
+The Bricklink module communicates with Bricklink in two different ways; via the API and also via the web for wanted list management.
+
+To use any function that depends on the API which is all functions _not_ related to wanted lists, you must use the Save-BricklinkConfiguration command to save your initial API information securely by running the following commands in PowerShell, replacing <value> with your actual API credentials:
 
 ```
 Save-BricklinkConfiguration -Name "ConsumerKey" -Value "<your_consumer_key>"
 Save-BricklinkConfiguration -Name "ConsumerSecret" -Value "<your_consumer_secret>"
 Save-BricklinkConfiguration -Name "TokenValue" -Value "<your_token_value>"
 Save-BricklinkConfiguration -Name "TokenSecret" -Value "<your_token_secret>"
+```
+
+To work with wanted lists, you must also provide your Bricklink store username and password.
+
+```
+Save-BricklinkConfiguration -Name "username" -Value "<username>"
+Save-BricklinkConfiguration -Name "password" -Value "<password>"
 ```
 
 This information is stored securely and is used by the module to authenticate your API requests.
