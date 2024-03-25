@@ -1,3 +1,32 @@
+<#
+.SYNOPSIS
+Retrieves wanted lists from BrickLink.
+
+.DESCRIPTION
+The Get-WantedList function retrieves wanted lists from BrickLink's website. It sends a request to the BrickLink website to fetch the wanted lists associated with the logged-in user. The function can retrieve all wanted lists or a specific wanted list based on the provided name.
+
+.PARAMETER Name
+Specifies the name of the wanted list to retrieve. This parameter is optional. If not provided, all wanted lists associated with the logged-in user are retrieved.
+
+.EXAMPLE
+Get-WantedList -Name "MyWantedList"
+Retrieves the wanted list named "MyWantedList".
+
+.EXAMPLE
+Get-WantedList
+Retrieves all wanted lists associated with the logged-in user.
+
+.INPUTS
+None. You cannot pipe input to this function.
+
+.OUTPUTS
+System.Object
+The function returns an object representing the wanted lists fetched from BrickLink's website.
+
+.NOTES
+The function relies on the InvokeBricklinkWebCall function to make the HTTP request to the BrickLink website.
+#>
+
 function Get-WantedList {
     [CmdletBinding()]
     param

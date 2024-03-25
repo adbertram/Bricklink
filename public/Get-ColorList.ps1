@@ -1,12 +1,20 @@
+<#
+.SYNOPSIS
+Retrieves the list of BrickLink colors.
+
+.DESCRIPTION
+The Get-ColorList function retrieves the list of BrickLink colors using the BrickLink API. It returns the color information in the response from the API, along with an additional "Not Applicable" color entry.
+
+.PARAMETER None
+This function does not accept any parameters.
+
+.EXAMPLE
+$colors = Get-ColorList
+
+This example calls the Get-ColorList function to retrieve the list of BrickLink colors and stores the result in the $colors variable.
+
+#>
 function Get-ColorList {
-    <#
-        .SYNOPSIS
-            https://www.bricklink.com/v3/api.page?page=get-color-list
-    
-        .EXAMPLE
-            PS> functionName
-    
-    #>
     [CmdletBinding()]
     param
     ()

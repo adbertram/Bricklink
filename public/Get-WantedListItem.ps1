@@ -1,3 +1,41 @@
+<#
+.SYNOPSIS
+Retrieves wanted list items from BrickLink.
+
+.DESCRIPTION
+The Get-WantedListItem function retrieves wanted list items from BrickLink's website. It sends a request to the BrickLink website to fetch the wanted list items based on the specified criteria such as wanted list ID, item number, color, and option to include only missing items. The function can retrieve all wanted list items or a subset based on the provided parameters.
+
+.PARAMETER WantedListId
+Specifies the ID of the wanted list from which to retrieve items. This parameter is optional.
+
+.PARAMETER ItemNumber
+Specifies the item number of the wanted list item to retrieve. This parameter is optional.
+
+.PARAMETER ColorId
+Specifies the color ID of the wanted list item to retrieve. This parameter is optional.
+
+.PARAMETER MissingItemsOnly
+Indicates whether to retrieve only the missing items from the wanted list. This switch is optional.
+
+.EXAMPLE
+Get-WantedListItem -WantedListId 12345
+Retrieves all items from the wanted list with ID "12345".
+
+.EXAMPLE
+Get-WantedListItem -ItemNumber "3001" -ColorId 11 -MissingItemsOnly
+Retrieves only the missing items with item number "3001" and color ID "11" from all wanted lists.
+
+.INPUTS
+None. You cannot pipe input to this function.
+
+.OUTPUTS
+System.Object
+The function returns an object representing the wanted list items fetched from BrickLink's website.
+
+.NOTES
+The function relies on the InvokeBricklinkWebCall and FindWantedListItems functions to make the HTTP request to the BrickLink website and parse the HTML response, respectively.
+#>
+
 function Get-WantedListItem {
     [CmdletBinding()]
     param

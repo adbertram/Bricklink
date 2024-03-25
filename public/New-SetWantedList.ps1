@@ -1,3 +1,29 @@
+<#
+.SYNOPSIS
+Creates a new wanted list on BrickLink for a given set number.
+
+.DESCRIPTION
+The New-SetWantedList function creates a new wanted list on BrickLink for a given set number. It retrieves the set's information, including its items, from BrickLink's API and creates a new wanted list with the set's items. The function handles duplicate items by keeping the one with the highest quantity.
+
+.PARAMETER SetNumber
+The set number for which to create the wanted list. This parameter is mandatory.
+
+.PARAMETER WantedListName
+The name of the wanted list to create. If not provided, the set number will be used as the name.
+
+.EXAMPLE
+New-SetWantedList -SetNumber '10255-1'
+
+This example creates a new wanted list on BrickLink for the set with the number '10255-1'. The wanted list will be named '10255-1'.
+
+.EXAMPLE
+New-SetWantedList -SetNumber '10255-1' -WantedListName 'Assembly Square'
+
+This example creates a new wanted list on BrickLink for the set with the number '10255-1', and the wanted list will be named 'Assembly Square'.
+
+.NOTES
+This function requires the InvokeBricklinkWebCall function to make API calls to BrickLink.
+#>
 function New-SetWantedList {
     [CmdletBinding()]
     param

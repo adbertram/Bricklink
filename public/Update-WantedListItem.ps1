@@ -1,5 +1,48 @@
+<#
+.SYNOPSIS
+Updates one or more items in a wanted list on BrickLink.
+
+.DESCRIPTION
+The Update-WantedListItem function allows you to update various properties of one or more items in a wanted list on BrickLink. You can update the condition, notification setting, quantity filled, remarks, static price, or set the price to the last 6 months average value.
+
+.PARAMETER WantedListItem
+The wanted list item(s) to update. This parameter is mandatory and accepts pipeline input.
+
+.PARAMETER Condition
+The new condition for the wanted list item(s).
+
+.PARAMETER Notify
+A boolean value indicating whether to enable or disable notifications for the wanted list item(s).
+
+.PARAMETER QuantityFilled
+The new quantity filled for the wanted list item(s).
+
+.PARAMETER Remarks
+The new remarks for the wanted list item(s).
+
+.PARAMETER StaticPrice
+The new static price for the wanted list item(s). This parameter is part of the 'StaticPrice' parameter set.
+
+.PARAMETER Last6MonthsAvgValuePrice
+A switch parameter that sets the price of the wanted list item(s) to the last 6 months average value. This parameter is part of the 'Last6MonthsAvgValuePrice' parameter set.
+
+.EXAMPLE
+$wantedListItem | Update-WantedListItem -Condition 'Used'
+
+This example updates the condition of the wanted list item(s) in the pipeline to 'Used'.
+
+.EXAMPLE
+Update-WantedListItem -WantedListItem $wantedListItems -Last6MonthsAvgValuePrice
+
+This example updates the price of the wanted list item(s) in the $wantedListItems variable to the last 6 months average value.
+
+.NOTES
+This function requires the InvokeBricklinkWebCall function to make API calls to BrickLink.
+Wanted list items can only be updated for a single wanted list at a time.
+Multiple wanted list items at once are only supported for updating the price to the last 6 months average value.
+#>
 function Update-WantedListItem {
-    [CmdletBinding(DefaultParameterSetName='None')]
+    [CmdletBinding(DefaultParameterSetName = 'None')]
     param
     (
 

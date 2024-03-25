@@ -1,3 +1,19 @@
+<#
+.SYNOPSIS
+Retrieves the BrickLink configuration items from the configuration file.
+
+.DESCRIPTION
+The Get-BricklinkConfigurationItem function reads the BrickLink configuration items from the configuration.json file located in the module's root folder. It decrypts the encrypted configuration items and returns the configuration object.
+
+.PARAMETER None
+This function does not accept any parameters.
+
+.EXAMPLE
+$config = Get-BricklinkConfigurationItem
+
+This example calls the Get-BricklinkConfigurationItem function to retrieve the BrickLink configuration items and stores them in the $config variable.
+
+#>
 function Get-BricklinkConfigurationItem {
     [CmdletBinding()]
     param
