@@ -32,7 +32,7 @@ function Get-Subsets {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [ValidateSet('Alternates', 'Counterparts', 'Extra')]
+        [ValidateSet('Alternates', 'Counterparts', 'Extra', 'Sticker Sheets')]
         [string[]]$Exclude
     )
 
@@ -64,11 +64,9 @@ function Get-Subsets {
         if ($Exclude -contains "Counterparts") {
             $filters += "!`$_.is_counterpart"
         }
-        ## Sometimes Bricklink has a completely separate entry for the extra qantity part and the same part
-        ## with no extra quantity
-        # if ($Exclude -contains "Extra") {
-        #     $filters += "`$_.extra_quantity -eq 0"
-        # }
+        if ($Exclude -contains "Sticker Sheets") {
+            $filters += "`$_.item.category_id -ne 160"
+        }
         if ($filters.Count -eq 0) {
             $whereFilter = "{ $true }"
         } else {
@@ -77,9 +75,12 @@ function Get-Subsets {
         $items = ($response.entries).where([scriptblock]::Create($whereFilter))
         if ($Exclude -contains 'Extra') {
             ## need the where filter because if we decrement the extra_quantity, that sometimes leads an item with 0 quantity and we want to exlcude that
-            ($items | Select-Object -Property *,@{n='quantity';e={ [int]$_.quantity - [int]$_.extra_quantity }} -ExcludeProperty quantity).where({$_.quantity -gt 0})
-        } else {
-            $items
+            $items = ($items | Select-Object -Property *, @{n = 'quantity'; e = { [int]$_.quantity - [int]$_.extra_quantity } } -ExcludeProperty quantity).where({ $_.quantity -gt 0 })
+        }
+        ## when like lots are returned, remove the lot with the lower qty. This happens when the part is marked "MID" on the Bricklink
+        ## set inventory page. It has something to do with alternates even if we remove all alternates.
+        $items | Group-Object -Property @{Expression={$_.item.no} },@{Expression={$_.color_id}} | ForEach-Object {
+            $_.Group | Sort-Object -Property quantity -Descending | Select-Object -First 1
         }
     }
 }
