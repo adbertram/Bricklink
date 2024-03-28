@@ -37,7 +37,7 @@ function Get-BricklinkConfiguration {
     )
 
     $config = Get-Content -Path $script:configFilePath | ConvertFrom-Json
-    if ($config.api_consumer_key -match 'bricklink consumer secret') {
+    if ($config.api_consumer_key -match 'bricklink consumer key') {
         throw "Your Bricklink API and store credentials could not be found. Have you ran Save-BricklinkConfigurationItem yet to save them?"
     }
 
