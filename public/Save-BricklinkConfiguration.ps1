@@ -99,6 +99,6 @@ function Save-BricklinkConfiguration {
             $val = encrypt($_.Value)
         }
         $config.($paramToConfItemMap[$_.Key]) = $val
-        $config | ConvertTo-Json | Set-Content -Path "$script:rootModuleFolderPath\configuration.json"
+        $config | ConvertTo-Json | Set-Content -Path $script:configFilePath
     }
 }
