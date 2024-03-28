@@ -40,7 +40,7 @@ function Connect-Web {
     }
     try {
         $response = Invoke-WebRequest -Uri $loginUri -Method Post -Body $credentials -SessionVariable session
-        if ($response.StatusCode -ne 200) {
+        if ($response.StatusCode -ne 200 -or (($response.Content | ConvertFrom-Json).returnCode -ne 0)) {
             $jsonResponse = $response.Content | ConvertFrom-Json
             throw "Unable to authenticate via Bricklink web. Server returned error $($jsonResponse.returnCode): $($jsonResponse.returnMessage)"
         }
