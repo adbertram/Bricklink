@@ -38,7 +38,7 @@ function Get-BricklinkConfiguration {
 
     $config = Get-Content -Path $script:configFilePath | ConvertFrom-Json
     if ($config.api_consumer_key -match 'bricklink consumer key') {
-        throw "Your Bricklink API and store credentials could not be found. Have you ran Save-BricklinkConfigurationItem yet to save them?"
+        throw "Your Bricklink API and store credentials could not be found. Have you ran Save-BlBricklinkConfigurationItem yet to save them?"
     }
 
     $config.PSObject.Properties | ForEach-Object {

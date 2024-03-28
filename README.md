@@ -47,9 +47,9 @@ This information is stored securely and is used by the module to authenticate yo
 
 After the initial setup and configuration, you can begin using the module to interact with the Bricklink API. Here are a few examples of what you can do:
 
-- Get a list of categories: Get-CategoryList
-- Add an item to a wanted list: Add-WantedListItem -WantedListId <id> -ItemNo "<item_no>" -Qty <quantity> -ColorId <color_id>
-- Get price guide information for an item: Get-PriceGuide -Type "<type>" -No "<no>" -NewOrUsed "N" -GuideType "sold" -CountryCode "US"
+- Get a list of categories: Get-BlCategoryList
+- Add an item to a wanted list: Add-BlWantedListItem -WantedListId <id> -ItemNo "<item_no>" -Qty <quantity> -ColorId <color_id>
+- Get price guide information for an item: Get-BlPriceGuide -Type "<type>" -No "<no>" -NewOrUsed "N" -GuideType "sold" -CountryCode "US"
 
 For detailed information on each cmdlet and its parameters, refer to the cmdlet help within PowerShell.
 
