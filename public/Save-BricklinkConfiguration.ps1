@@ -34,7 +34,7 @@ None. You cannot pipe input to this function.
 None. The function does not generate any output.
 
 .NOTES
-The function encrypts sensitive information before saving it to the configuration file. It relies on the Get-BricklinkConfigurationItem function to retrieve the current configuration.
+The function encrypts sensitive information before saving it to the configuration file. It relies on the Get-BlBricklinkConfiguration function to retrieve the current configuration.
 #>
 
 function Save-BricklinkConfiguration {
@@ -91,7 +91,7 @@ function Save-BricklinkConfiguration {
         'ApiTokenSecret'    = 'api_token_secret'
     }
 
-    $config = Get-BricklinkConfigurationItem
+    $config = Get-BlBricklinkConfiguration
 
     $PSBoundParameters.GetEnumerator() | ForEach-Object {
         $val = $_.Value

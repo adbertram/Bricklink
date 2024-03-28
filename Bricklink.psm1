@@ -2,6 +2,31 @@ Set-StrictMode -Version Latest
 
 $script:rootModuleFolderPath = $PSScriptRoot
 
+$configFileParentFolder = if ($PSVersionTable.PSVersion -lt [Version]"6.0" -or $IsWindows) {
+    $env:APPDATA
+} elseif ($IsMacOS) {
+    "$HOME/Library/Application Support"
+} elseif ($IsLinux) {
+    "$HOME/.config"
+}
+
+# Ensuring the path ends with 'Bricklink' directory.
+$configFileParentFolder = Join-Path -Path $configFileParentFolder -ChildPath 'Bricklink'
+
+$exampleConfigFilePath = Join-Path -Path $PSScriptRoot -ChildPath "configuration.example.json"
+$script:configFilePath = Join-Path -Path $configFileParentFolder -ChildPath "configuration.json"
+
+# Check if 'Bricklink' folder exists, if not, create it.
+if (-not (Test-Path $configFileParentFolder)) {
+    Write-Warning -Message "It looks like this is your first time importing the Bricklink module. Be sure to use Save-BlBricklinkConfiguration to save your API keys and authentication information next."
+    New-Item -Path $configFileParentFolder -ItemType Directory
+}
+
+# Now that the folder definitely exists, copy the file.
+if (-not (Test-Path $script:configFilePath)) {
+    Copy-Item -Path $exampleConfigFilePath -Destination $script:configFilePath -Force
+}
+
 # Get public and private function definition files.
 $Public = @(Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue)
 $Private = @(Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue)
@@ -20,7 +45,7 @@ foreach ($file in $Public) {
     Export-ModuleMember -Function $file.BaseName
 }
 
-$script:bricklinkConfiguration = Get-BricklinkConfigurationItem
+$script:bricklinkConfiguration = Get-BricklinkConfiguration
 
 enum Color {
     Black

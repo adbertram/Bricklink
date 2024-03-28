@@ -3,18 +3,18 @@
 Retrieves the BrickLink configuration items from the configuration file.
 
 .DESCRIPTION
-The Get-BricklinkConfigurationItem function reads the BrickLink configuration items from the configuration.json file located in the module's root folder. It decrypts the encrypted configuration items and returns the configuration object.
+The Get-BlBricklinkConfiguration function reads the BrickLink configuration items from the configuration.json file located in the module's root folder. It decrypts the encrypted configuration items and returns the configuration object.
 
 .PARAMETER None
 This function does not accept any parameters.
 
 .EXAMPLE
-$config = Get-BricklinkConfigurationItem
+$config = Get-BlBricklinkConfiguration
 
-This example calls the Get-BricklinkConfigurationItem function to retrieve the BrickLink configuration items and stores them in the $config variable.
+This example calls the Get-BlBricklinkConfiguration function to retrieve the BrickLink configuration items and stores them in the $config variable.
 
 #>
-function Get-BricklinkConfigurationItem {
+function Get-BricklinkConfiguration {
     [CmdletBinding()]
     param
     ()
@@ -36,10 +36,10 @@ function Get-BricklinkConfigurationItem {
         'api_token_secret'
     )
 
-    if (-not (Test-Path -Path "$script:rootModuleFolderPath\configuration.json" -PathType Leaf)) {
-        throw "The required configuration file [$script:rootModuleFolderPath\configuration.json] could not be found. Have you ran Save-BricklinkConfigurationItem yet?"
-    }
     $config = Get-Content -Path "$script:rootModuleFolderPath\configuration.json" | ConvertFrom-Json
+    if ($config.api_consumer_key -match 'bricklink consumer secret') {
+        throw "Your Bricklink API and store credentials could not be found. Have you ran Save-BricklinkConfigurationItem yet to save them?"
+    }
 
     $config.PSObject.Properties | ForEach-Object {
         $val = $_.Value
