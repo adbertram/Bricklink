@@ -10,6 +10,10 @@ $configFileParentFolder = if ($PSVersionTable.PSVersion -lt [Version]"6.0" -or $
     "$HOME/.config"
 }
 
+$script:apiCallCountTrackingFilePath = "$configFileParentFolder\api_call_count.json"
+
+$script:maxDailyApiCallCount = 5000
+
 # Ensuring the path ends with 'Bricklink' directory.
 $configFileParentFolder = Join-Path -Path $configFileParentFolder -ChildPath 'Bricklink'
 

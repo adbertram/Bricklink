@@ -22,6 +22,16 @@ function InvokeBricklinkApiCall {
 
     $ErrorActionPreference = 'Stop'
 
+    $apiCallData = Get-BlApiCallCount
+
+    if ($apiCallData.Count -ge $script:maxDailyApiCallCount) {
+        throw "API call limit reached: 5000 calls in 24 hours."
+    } else {
+        Write-Verbose -Message "Bricklink API 24-hour call count is currently at: $($apiCallData.Count)."
+        IncrementBricklinkApiCallCount
+    }
+
+
     $baseUri = 'https://api.bricklink.com/api/store/v1'
     $apiUri = "$baseUri/$Uri"
 
