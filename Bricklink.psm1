@@ -2,12 +2,16 @@ Set-StrictMode -Version Latest
 
 $script:rootModuleFolderPath = $PSScriptRoot
 
-$configFileParentFolder = if ($PSVersionTable.PSVersion -lt [Version]"6.0" -or $IsWindows) {
-    $env:APPDATA
-} elseif ($IsMacOS) {
-    "$HOME/Library/Application Support"
-} elseif ($IsLinux) {
-    "$HOME/.config"
+if (!$args[0]) {
+    $configFileParentFolder = if ($PSVersionTable.PSVersion -lt [Version]"6.0" -or $IsWindows) {
+        $env:APPDATA
+    } elseif ($IsMacOS) {
+        "$HOME/Library/Application Support"
+    } elseif ($IsLinux) {
+        "$HOME/.config"
+    }
+} else {
+    $configFileParentFolder = $args[0]
 }
 
 $script:apiCallCountTrackingFilePath = "$configFileParentFolder\api_call_count.json"
