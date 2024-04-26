@@ -33,10 +33,11 @@ function Get-BricklinkConfiguration {
         return $secret.SecretValue
     }
 
-    $config = Get-Content -Path $script:configFilePath | ConvertFrom-Json
+    $configFile = Get-Content -Path $script:configFilePath | ConvertFrom-Json
+    $config = @{}
 
     # Determine encryption provider
-    switch ($config.encryption.provider) {
+    switch ($configFile.encryption.provider) {
         'Local' {
             $encryptedItems = @(
                 'password'
@@ -46,16 +47,17 @@ function Get-BricklinkConfiguration {
                 'api_token_secret'
             )
 
-            $config.PSObject.Properties | ForEach-Object {
+            $configFile.PSObject.Properties | ForEach-Object {
                 $val = $_.Value
                 if ($_.Name -in $encryptedItems -and $_.Value) {
                     $val = decrypt($_.Value)
                 }
-                $config.($_.Name) = $val
+                $config[$_.Name] = $val
             }
+            break
         }
         'AzureKeyVault' {
-            $KeyVaultName = $config.encryption.azure_key_vault_name
+            $KeyVaultName = $configFile.encryption.azure_key_vault_name
             $secretNames = @{
                 'password'            = 'BricklinkPassword'
                 'api_consumer_key'    = 'BricklinkConsumerKey'
@@ -67,11 +69,12 @@ function Get-BricklinkConfiguration {
             foreach ($item in $secretNames.GetEnumerator()) {
                 $config[$item.Key] = decrypt((Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $item.Value).SecretValue)
             }
+            break
         }
         default {
-            throw "Unsupported encryption provider: $($config.encryption.provider)"
+            throw "Unsupported encryption provider: $($configFile.encryption.provider)"
         }
     }
 
-    $config
+    [pscustomobject]$config
 }
