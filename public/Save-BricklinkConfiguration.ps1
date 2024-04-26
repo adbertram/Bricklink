@@ -3,7 +3,7 @@
 Saves Bricklink configuration settings.
 
 .DESCRIPTION
-The Save-BricklinkConfiguration function saves Bricklink configuration settings to a JSON file. It encrypts sensitive information such as passwords and API tokens before saving them to ensure security.
+The Save-BricklinkConfiguration function saves Bricklink configuration settings to a JSON file or Azure Key Vault. It encrypts sensitive information such as passwords and API tokens before saving them to ensure security.
 
 .PARAMETER Username
 Specifies the Bricklink username.
@@ -25,7 +25,7 @@ Specifies the Bricklink API token secret.
 
 .EXAMPLE
 Save-BricklinkConfiguration -Username "user123" -Password "password123" -ApiConsumerKey "consumerkey123" -ApiConsumerSecret "consumersecret123" -ApiToken "token123" -ApiTokenSecret "tokensecret123"
-Saves the Bricklink configuration settings to a JSON file.
+Saves the Bricklink configuration settings to a JSON file or Azure Key Vault.
 
 .INPUTS
 None. You cannot pipe input to this function.
@@ -34,7 +34,7 @@ None. You cannot pipe input to this function.
 None. The function does not generate any output.
 
 .NOTES
-The function encrypts sensitive information before saving it to the configuration file. It relies on the Get-BlBricklinkConfiguration function to retrieve the current configuration.
+The function encrypts sensitive information before saving it to the configuration file or Azure Key Vault. It relies on the Get-BlBricklinkConfiguration function to retrieve the current configuration.
 #>
 
 function Save-BricklinkConfiguration {
@@ -74,6 +74,10 @@ function Save-BricklinkConfiguration {
         return $encrypted
     }
 
+    function Set-KeyVaultSecretValue([string]$secretName, [string]$secretValue, [string]$KeyVaultName) {
+        Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $secretName -SecretValue (ConvertTo-SecureString $secretValue -AsPlainText -Force)
+    }
+
     $encryptedItems = @(
         'password'
         'api_consumer_key'
@@ -93,12 +97,24 @@ function Save-BricklinkConfiguration {
 
     $config = Get-BlBricklinkConfiguration
 
-    $PSBoundParameters.GetEnumerator() | ForEach-Object {
-        $val = $_.Value
-        if ($paramToConfItemMap[$_.Key] -in $encryptedItems) {
-            $val = encrypt($_.Value)
+    if ($config.encryption.provider -eq 'AzureKeyVault') {
+        $KeyVaultName = $config.encryption.azure_key_vault_name
+        $PSBoundParameters.GetEnumerator() | ForEach-Object {
+            $val = $_.Value
+            if ($paramToConfItemMap[$_.Key] -in $encryptedItems) {
+                Set-KeyVaultSecretValue -secretName $paramToConfItemMap[$_.Key] -secretValue $val -KeyVaultName $KeyVaultName
+            } else {
+                $config.($paramToConfItemMap[$_.Key]) = $val
+            }
         }
-        $config.($paramToConfItemMap[$_.Key]) = $val
-        $config | ConvertTo-Json | Set-Content -Path $script:configFilePath
+    } else {
+        $PSBoundParameters.GetEnumerator() | ForEach-Object {
+            $val = $_.Value
+            if ($paramToConfItemMap[$_.Key] -in $encryptedItems) {
+                $val = encrypt($_.Value)
+            }
+            $config.($paramToConfItemMap[$_.Key]) = $val
+            $config | ConvertTo-Json | Set-Content -Path $script:configFilePath
+        }
     }
 }
