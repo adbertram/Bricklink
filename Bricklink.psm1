@@ -2,7 +2,7 @@ Set-StrictMode -Version Latest
 
 $script:rootModuleFolderPath = $PSScriptRoot
 
-if (!$args[0]) {
+if ($args.Count -eq 0) {
     $configFileParentFolder = if ($PSVersionTable.PSVersion -lt [Version]"6.0" -or $IsWindows) {
         $env:APPDATA
     } elseif ($IsMacOS) {
