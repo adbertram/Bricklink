@@ -21,9 +21,8 @@ function Get-BricklinkConfiguration {
     $ErrorActionPreference = 'Stop'
 
     # Helper function to decrypt locally stored encrypted values
-    function decrypt([string]$TextToDecrypt) {
-        $secure = ConvertTo-SecureString $TextToDecrypt
-        $hook = New-Object system.Management.Automation.PSCredential("test", $secure)
+    function decrypt([securestring]$TextToDecrypt) {
+        $hook = New-Object system.Management.Automation.PSCredential("test", $TextToDecrypt)
         $plain = $hook.GetNetworkCredential().Password
         return $plain
     }
@@ -31,7 +30,7 @@ function Get-BricklinkConfiguration {
     # Helper function to retrieve a secret from Azure Key Vault
     function Get-KeyVaultSecretValue([string]$secretName, [string]$KeyVaultName) {
         $secret = Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $secretName
-        return $secret.SecretValueText
+        return $secret.SecretValue
     }
 
     $config = Get-Content -Path $script:configFilePath | ConvertFrom-Json
@@ -66,7 +65,7 @@ function Get-BricklinkConfiguration {
             }
 
             foreach ($item in $secretNames.GetEnumerator()) {
-                $config[$item.Key] = Get-KeyVaultSecretValue -secretName $item.Value -KeyVaultName $KeyVaultName
+                $config[$item.Key] = decrypt((Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $item.Value).SecretValue)
             }
         }
         default {
