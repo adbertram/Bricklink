@@ -20,61 +20,24 @@ function Get-BricklinkConfiguration {
 
     $ErrorActionPreference = 'Stop'
 
-    # Helper function to decrypt locally stored encrypted values
-    function decrypt([securestring]$TextToDecrypt) {
-        $hook = New-Object system.Management.Automation.PSCredential("test", $TextToDecrypt)
-        $plain = $hook.GetNetworkCredential().Password
-        return $plain
+    $configFile = Get-Content -Path $script:configFilePath | ConvertFrom-Json -Depth 5
+
+    $config = @{
+        'secret_values' = @()
     }
-
-    # Helper function to retrieve a secret from Azure Key Vault
-    function Get-KeyVaultSecretValue([string]$secretName, [string]$KeyVaultName) {
-        $secret = Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $secretName
-        return $secret.SecretValue
-    }
-
-    $configFile = Get-Content -Path $script:configFilePath | ConvertFrom-Json
-    $config = @{}
-
-    # Determine encryption provider
-    switch ($configFile.encryption.provider) {
-        'Local' {
-            $encryptedItems = @(
-                'password'
-                'api_consumer_key'
-                'api_consumer_secret'
-                'api_token'
-                'api_token_secret'
-            )
-
-            $configFile.PSObject.Properties | ForEach-Object {
-                $val = $_.Value
-                if ($_.Name -in $encryptedItems -and $_.Value) {
-                    $val = decrypt($_.Value)
+    foreach ($prop in $configFile.PSObject.Properties) {
+        $itemName = $prop.Name
+        if ($itemName -eq 'secret_values') {
+            $secretVals = $configfile.secret_values
+            foreach ($secProp in $secretVals.PSObject.Properties) {
+                $secName = $secProp.Name.ToString()
+                $config.secret_values += [pscustomobject]@{
+                    $secName = (GetSecret $secName)
                 }
-                $config[$_.Name] = $val
             }
-            break
-        }
-        'AzureKeyVault' {
-            $KeyVaultName = $configFile.encryption.azure_key_vault_name
-            $secretNames = @{
-                'password'            = 'BricklinkPassword'
-                'api_consumer_key'    = 'BricklinkConsumerKey'
-                'api_consumer_secret' = 'BricklinkConsumerSecret'
-                'api_token'           = 'BricklinkApiToken'
-                'api_token_secret'    = 'BricklinkApiTokenSecret'
-            }
-
-            foreach ($item in $secretNames.GetEnumerator()) {
-                $config[$item.Key] = decrypt((Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $item.Value).SecretValue)
-            }
-            break
-        }
-        default {
-            throw "Unsupported encryption provider: $($configFile.encryption.provider)"
+        } else {
+            $config.$itemName = $prop.Value
         }
     }
-
     [pscustomobject]$config
 }
