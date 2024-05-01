@@ -20,24 +20,21 @@ function Get-BricklinkConfiguration {
 
     $ErrorActionPreference = 'Stop'
 
-    $configFile = Get-Content -Path $script:configFilePath | ConvertFrom-Json -Depth 5
+    $configFile = Get-Content -Path $script:configFilePath | ConvertFrom-Json -Depth 10
 
-    $config = @{
-        'secret_values' = @()
-    }
+    $config = @{}
+    $secretVals = @{}
     foreach ($prop in $configFile.PSObject.Properties) {
         $itemName = $prop.Name
         if ($itemName -eq 'secret_values') {
-            $secretVals = $configfile.secret_values
-            foreach ($secProp in $secretVals.PSObject.Properties) {
+            foreach ($secProp in $configfile.secret_values.PSObject.Properties) {
                 $secName = $secProp.Name.ToString()
-                $config.secret_values += [pscustomobject]@{
-                    $secName = (GetSecret $secName)
-                }
+                $secretVals[$secName] = (GetSecret $secName)
             }
         } else {
             $config.$itemName = $prop.Value
         }
     }
+    $config.secret_values = [pscustomobject]$secretVals
     [pscustomobject]$config
 }
