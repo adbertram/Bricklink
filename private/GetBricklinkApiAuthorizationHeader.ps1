@@ -13,19 +13,19 @@ function GetBricklinkApiAuthorizationHeader {
         
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$ConsumerKey = $script:bricklinkConfiguration.api_consumer_key,
+        [string]$ConsumerKey = $script:bricklinkConfiguration.secret_values.api_consumer_key,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$ConsumerSecret = $script:bricklinkConfiguration.api_consumer_secret,
+        [string]$ConsumerSecret = $script:bricklinkConfiguration.secret_values.api_consumer_secret,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$Token = $script:bricklinkConfiguration.api_token,
+        [string]$Token = $script:bricklinkConfiguration.secret_values.api_token,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$TokenSecret = $script:bricklinkConfiguration.api_token_secret
+        [string]$TokenSecret = $script:bricklinkConfiguration.secret_values.api_token_secret
     )
 
     $ErrorActionPreference = 'Stop'
