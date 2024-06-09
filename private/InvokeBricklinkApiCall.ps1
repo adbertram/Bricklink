@@ -24,10 +24,10 @@ function InvokeBricklinkApiCall {
 
     $apiCallData = Get-BlApiCallCount
 
-    if ($apiCallData.Count -ge $script:maxDailyApiCallCount) {
+    if ($apiCallData.count -ge $script:maxDailyApiCallCount) {
         throw "API call limit reached: $script:maxDailyApiCallCount calls in 24 hours."
     } else {
-        Write-Verbose -Message "Bricklink API 24-hour call count is currently at: $($apiCallData.Count)."
+        Write-Verbose -Message "Bricklink API 24-hour call count is currently at: $($apiCallData.count)."
         IncrementBricklinkApiCallCount
     }
 
