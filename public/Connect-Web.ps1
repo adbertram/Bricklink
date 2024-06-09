@@ -35,7 +35,7 @@ function Connect-Web {
     $loginUri = 'https://www.bricklink.com/ajax/renovate/loginandout.ajax'
     $credentials = @{
         userid          = $script:bricklinkConfiguration.username
-        password        = $script:bricklinkConfiguration.password
+        password        = $script:bricklinkConfiguration.secret_values.password
         keepme_loggedin = '1'
     }
     try {
