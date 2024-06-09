@@ -23,9 +23,10 @@ function InvokeBricklinkWebCall {
     $ErrorActionPreference = 'Stop'
 
     $irmParams = @{
-        Uri                = $Uri
-        Method             = $Method
-        StatusCodeVariable = 'irmStatus'
+        Uri                   = $Uri
+        Method                = $Method
+        StatusCodeVariable    = 'irmStatus'
+        AllowInsecureRedirect = $true
     }
 
     if (-not $NoAuthentication.IsPresent) {
