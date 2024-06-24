@@ -14,12 +14,12 @@ if ($args.Count -eq 0) {
     $configFileParentFolder = $args[0]
 }
 
+# Ensuring the path ends with 'Bricklink' directory.
+$configFileParentFolder = Join-Path -Path $configFileParentFolder -ChildPath 'Bricklink'
+
 $script:apiCallCountTrackingFilePath = "$configFileParentFolder\api_call_count.json"
 
 $script:maxDailyApiCallCount = 5000
-
-# Ensuring the path ends with 'Bricklink' directory.
-$configFileParentFolder = Join-Path -Path $configFileParentFolder -ChildPath 'Bricklink'
 
 $exampleConfigFilePath = Join-Path -Path $PSScriptRoot -ChildPath "configuration.example.json"
 $script:configFilePath = Join-Path -Path $configFileParentFolder -ChildPath "configuration.json"
