@@ -21,7 +21,11 @@ function GetSecret {
         'AzureKeyVault' {
             $KeyVaultName = $config.encryption.azure_key_vault_name
             $azKeyName = ConvertToAzKeyVaultName $Name
-            (Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $azKeyName).SecretValue
+            $secret = Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $azKeyName
+            if (-not $secret) {
+                throw "Could not find a secret with the name of [$Name] in the Azure Key Vault [$KeyVaultName]"
+            }
+            $secret.SecretValue
             break
         }
         default {
