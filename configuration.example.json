@@ -1,11 +1,11 @@
 {
-    "username": "<your bricklink store username>",
+    "bricklink_username": "<your bricklink store username>",
     "secret_values": {
-        "password": "<your bricklink store password>",
-        "api_consumer_key": "<bricklink consumer key>",
-        "api_consumer_secret": "<bricklink consumer secret>",
-        "api_token": "<bricklink api token",
-        "api_token_secret": "<bricklink api token secret"
+        "bricklink_password": "<your bricklink store password>",
+        "bricklink_api_consumer_key": "<bricklink consumer key>",
+        "bricklink_api_consumer_secret": "<bricklink consumer secret>",
+        "bricklink_api_token": "<bricklink api token",
+        "bricklink_api_token_secret": "<bricklink api token secret"
     },
     "encryption": {
         "provider": "<AzureKeyVault or Local>",

@@ -23,6 +23,7 @@ $script:maxDailyApiCallCount = 5000
 
 $exampleConfigFilePath = Join-Path -Path $PSScriptRoot -ChildPath "configuration.example.json"
 $script:configFilePath = Join-Path -Path $configFileParentFolder -ChildPath "configuration.json"
+Write-Verbose -Message "Using configuration file at [$script:configFilePath]"
 
 # Check if 'Bricklink' folder exists, if not, create it.
 if (-not (Test-Path $configFileParentFolder)) {
