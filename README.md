@@ -37,7 +37,7 @@ Save-BlBricklinkConfiguration -Name "TokenSecret" -Value "<your_token_secret>"
 To work with wanted lists, you must also provide your Bricklink store username and password.
 
 ```
-Save-BlBricklinkConfiguration -Name "username" -Value "<username>"
+Save-BlBricklinkConfiguration -Name "bricklink-username" -Value "<bricklink-username>"
 Save-BlBricklinkConfiguration -Name "password" -Value "<password>"
 ```
 

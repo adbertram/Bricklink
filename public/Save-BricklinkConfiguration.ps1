@@ -87,12 +87,12 @@ function Save-BricklinkConfiguration {
     )
 
     $paramToConfItemMap = @{
-        'Username'          = 'username'
-        'Password'          = 'password'
-        'ApiConsumerKey'    = 'api_consumer_key'
-        'ApiConsumerSecret' = 'api_consumer_secret'
-        'ApiToken'          = 'api_token'
-        'ApiTokenSecret'    = 'api_token_secret'
+        'Username'          = 'bricklink-username'
+        'Password'          = 'bricklink-password'
+        'ApiConsumerKey'    = 'bricklink-api-consumer-key'
+        'ApiConsumerSecret' = 'bricklink-api-consumer-secret'
+        'ApiToken'          = 'bricklink-api-token'
+        'ApiTokenSecret'    = 'bricklink-api-token-secret'
     }
 
     $config = Get-BlBricklinkConfiguration

@@ -57,7 +57,7 @@ foreach ($file in $Public) {
 $script:bricklinkConfiguration = Get-BricklinkConfiguration
 
 enum ConfigurationItem {
-    username
+    bricklink-username
     password
     api_consumer_key
     api_consumer_secret
