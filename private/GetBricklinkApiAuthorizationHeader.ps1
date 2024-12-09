@@ -21,11 +21,11 @@ function GetBricklinkApiAuthorizationHeader {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$Token = $script:bricklinkConfiguration.'secret-values'.'api-token',
+        [string]$Token = $script:bricklinkConfiguration.'secret-values'.'bricklink-api-token',
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$TokenSecret = $script:bricklinkConfiguration.'secret-values'.'api-token-secret'
+        [string]$TokenSecret = $script:bricklinkConfiguration.'secret-values'.'bricklink-api-token-secret'
     )
 
     $ErrorActionPreference = 'Stop'
