@@ -17,7 +17,7 @@ function GetBricklinkApiAuthorizationHeader {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$ConsumerSecret = $script:bricklinkConfiguration.'secret-values'.'api-consumer-secret',
+        [string]$ConsumerSecret = $script:bricklinkConfiguration.'secret-values'.'bricklink-api-consumer-secret',
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
