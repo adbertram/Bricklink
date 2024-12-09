@@ -28,7 +28,7 @@ function Get-BricklinkConfiguration {
         $itemName = $prop.Name
         if ($itemName -eq 'secret-values') {
             foreach ($secProp in $configfile.'secret-values'.PSObject.Properties) {
-                $secName = $secProp.Name.ToString().replace('-', '_')
+                $secName = $secProp.Name.ToString()
                 $secretVals[$secName] = (GetSecret $secName)
             }
         } else {
