@@ -12,7 +12,7 @@ function GetSecret {
     ## Not using Get-BlBrickConfiguration on purpose here to prevent a circular reference
     $config = Get-Content -Path $script:configFilePath | ConvertFrom-Json -Depth 5
 
-    $name = $Name.ToString().replace('_', '-')
+    $kvSecName = $Name.ToString().replace('_', '-')
 
     # Determine encryption provider
     $secValue = switch ($config.encryption.provider) {
@@ -22,7 +22,7 @@ function GetSecret {
         }
         'AzureKeyVault' {
             $KeyVaultName = $config.encryption.azure_key_vault_name
-            $secret = Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $name
+            $secret = Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name $kvSecName
             if (-not $secret) {
                 throw "Could not find a secret with the name of [$name] in the Azure Key Vault [$KeyVaultName]"
             }
@@ -34,7 +34,7 @@ function GetSecret {
         }
     }
     if (-not $secValue) {
-        throw "Could not find a secret with the name of [$name]"
+        throw "Could not find a secret with the name of [$kvSecName]"
     }
 
     decryptSecureString $secValue

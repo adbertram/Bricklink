@@ -18,8 +18,6 @@ function SetSecret {
         $secure | ConvertFrom-SecureString
     }
 
-    $name = $Name.ToString().replace('_', '-')
-
     # Determine encryption provider
     switch ($script:bricklinkConfiguration.encryption.provider) {
         'Local' {
@@ -30,7 +28,8 @@ function SetSecret {
         }
         'AzureKeyVault' {
             $keyVaultName = $script:bricklinkConfiguration.encryption.azure_key_vault_name
-            $null = Set-AzKeyVaultSecret -VaultName $keyVaultName -Name $name -SecretValue $Value
+            $kvSecName = $Name.ToString().replace('_', '-')
+            $null = Set-AzKeyVaultSecret -VaultName $keyVaultName -Name $kvSecName -SecretValue $Value
             break
         }
         default {
