@@ -18,19 +18,19 @@ function SetSecret {
         $secure | ConvertFrom-SecureString
     }
 
+    $name = $Name.ToString().replace('_', '-')
+
     # Determine encryption provider
     switch ($script:bricklinkConfiguration.encryption.provider) {
         'Local' {
             $secValue = encrypt($Value)
-            $azKeyName = ConvertToAzKeyVaultName $Name
-            $script:bricklinkConfiguration.$confItemName = $secValue
+            $script:bricklinkConfiguration.$name = $secValue
             $script:bricklinkConfiguration | ConvertTo-Json | Set-Content -Path $script:configFilePath
             break
         }
         'AzureKeyVault' {
             $keyVaultName = $script:bricklinkConfiguration.encryption.azure_key_vault_name
-            $azKeyName = "bricklink-$($Name.ToString().replace('_','-'))"
-            $null = Set-AzKeyVaultSecret -VaultName $keyVaultName -Name $azKeyName -SecretValue $Value
+            $null = Set-AzKeyVaultSecret -VaultName $keyVaultName -Name $name -SecretValue $Value
             break
         }
         default {
